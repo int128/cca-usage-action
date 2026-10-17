@@ -22,6 +22,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -35,6 +37,8 @@ jobs:
   e2e-test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -44,12 +48,6 @@ jobs:
       - run: corepack enable
       - run: pnpm i
       - run: pnpm run build
-      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        id: token
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          owner: ${{ secrets.APP_OWNER }}
       - id: claude-code-action
         name: Run claude-code-action (mock)
         run: |
@@ -57,15 +55,7 @@ jobs:
       - name: Run int128/cca-usage-action
         uses: ./
         with:
-          token: ${{ steps.token.outputs.token }}
           execution-file: ${{ steps.claude-code-action.outputs.execution_file }}
-          # An organization project for E2E testing
-          project-id: PVT_kwDOAVRuvs4BSXon
-          project-field-id-calls: PVTF_lADOAVRuvs4BSXonzg_7LJQ
-          project-field-id-last-called-at: PVTF_lADOAVRuvs4BSXonzg_7LJ8
-          project-field-id-cost-usd: PVTF_lADOAVRuvs4BSXonzg_7LKA
-          # Transition the status field to "Success" or "Failure"
-          project-status-field-option-id: ${{ case(steps.claude-code-action.outcome == 'success', 'f75ad846', '2660a4d9') }}
 
   generate:
     runs-on: ubuntu-latest
