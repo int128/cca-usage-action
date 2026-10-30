@@ -35,7 +35,7 @@ jobs:
       - run: pnpm i
       - run: pnpm run build
       - id: claude-code-action
-        uses: anthropics/claude-code-action@f27be6b65a4652f08a2ba3cff79114829b588967 # v1.0.252
+        uses: anthropics/claude-code-action@ae68417a745a5df4b2124873632bd73a2255e6f6 # v1.0.259
         with:
           anthropic_federation_rule_id: fdrl_01U5YGZDuTp2QGxbJJJkiMsD
           anthropic_organization_id: 10a77efe-67f8-4a56-905a-c3dd6337950a
